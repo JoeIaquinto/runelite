@@ -353,6 +353,22 @@ public class MenuEntrySwapperPlugin extends Plugin
 			{
 				swap("pickpocket", option, target, true);
 			}
+			Boolean blackJackable = target.contains("menaphite") || target.contains("bandit thug");
+			if (config.swapPickpocket() && blackJackable)
+			{
+				boolean ko = shiftModifier;
+				if (!ko) {
+					for (NPC n : client.getNpcs()){
+						if (n.getAnimation() == 838 || n.getAnimation() == 395) ko = true;
+					}
+				}
+				if (ko) swap("pickpocket", option, target, true);
+				swap("knock-out", option, target, true);
+			}
+			if (config.swapPickpocket() && target.contains("bandit"))
+			{
+				swap("pickpocket", option, target, true);
+			}
 
 			if (config.swapAbyssTeleport() && target.contains("mage of zamorak"))
 			{
