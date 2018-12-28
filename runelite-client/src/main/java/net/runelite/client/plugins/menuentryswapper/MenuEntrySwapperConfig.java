@@ -183,6 +183,16 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
+			keyName = "swapBlackjack",
+			name = "Knock out and Pickpocket on blackjack-able NPCs",
+			description = "Swap to Knock-out and pickpocket when possible on NPC<br>Example:Bandit Thug, Menaphite Thug"
+	)
+	default boolean swapBlackjack()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "swapPay",
 		name = "Pay",
 		description = "Swap Talk-to with Pay on NPC<br>Example: Elstan, Heskel, Fayeth"

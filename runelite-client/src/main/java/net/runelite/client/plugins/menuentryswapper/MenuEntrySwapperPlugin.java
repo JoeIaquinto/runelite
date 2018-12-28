@@ -354,15 +354,14 @@ public class MenuEntrySwapperPlugin extends Plugin
 				swap("pickpocket", option, target, true);
 			}
 			Boolean blackJackable = target.contains("menaphite") || target.contains("bandit thug");
-			if (config.swapPickpocket() && blackJackable)
+			if (config.swapBlackjack() && blackJackable)
 			{
-				boolean ko = shiftModifier;
-				if (!ko) {
-					for (NPC n : client.getNpcs()){
-						if (n.getAnimation() == 838 || n.getAnimation() == 395) ko = true;
-					}
+				boolean pickpocket = false;
+				//Cycle through loaded NPCs, if any are knocked out or aggressive, pickpocket = true
+				for (NPC n : client.getNpcs()){
+					if (n.getAnimation() == 838 || n.getAnimation() == 395) pickpocket = true;
 				}
-				if (ko) swap("pickpocket", option, target, true);
+				if (pickpocket) swap("pickpocket", option, target, true);
 				swap("knock-out", option, target, true);
 			}
 			if (config.swapPickpocket() && target.contains("bandit"))
