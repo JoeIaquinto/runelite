@@ -353,20 +353,20 @@ public class MenuEntrySwapperPlugin extends Plugin
 			{
 				swap("pickpocket", option, target, true);
 			}
-			Boolean blackJackable = target.contains("menaphite") || target.contains("bandit thug");
-			if (config.swapBlackjack() && blackJackable)
+
+			if (config.swapBlackjack() && target.contains("menaphite") || target.contains("bandit"))
 			{
 				boolean pickpocket = false;
-				//Cycle through loaded NPCs, if any are knocked out or aggressive, pickpocket = true
+				//Cycle through loaded NPCs, if ***ANY*** are knocked out or aggressive, pickpocket = true
+				//This is the cause of issues when multiple NPCs are knocked out, you will attempt to pickpocket
 				for (NPC n : client.getNpcs()){
-					if (n.getAnimation() == 838 || n.getAnimation() == 395) pickpocket = true;
+					if (n.getAnimation() == 838 || n.getAnimation() == 395){
+						pickpocket = true;
+						break;
+					}
 				}
 				if (pickpocket) swap("pickpocket", option, target, true);
 				swap("knock-out", option, target, true);
-			}
-			if (config.swapPickpocket() && target.contains("bandit"))
-			{
-				swap("pickpocket", option, target, true);
 			}
 
 			if (config.swapAbyssTeleport() && target.contains("mage of zamorak"))

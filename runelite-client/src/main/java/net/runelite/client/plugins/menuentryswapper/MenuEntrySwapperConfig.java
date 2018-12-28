@@ -184,8 +184,8 @@ public interface MenuEntrySwapperConfig extends Config
 
 	@ConfigItem(
 			keyName = "swapBlackjack",
-			name = "Knock out and Pickpocket on blackjack-able NPCs",
-			description = "Swap to Knock-out and pickpocket when possible on NPC<br>Example:Bandit Thug, Menaphite Thug"
+			name = "Blackjack auto-swap",
+			description = "Swap to Knock-out and pickpocket when possible on NPC<br>Example:Bandit Thug, Menaphite Thug<br>NOTE: knock-out only works if it is the only NPC blackjacked in the area"
 	)
 	default boolean swapBlackjack()
 	{
