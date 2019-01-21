@@ -27,23 +27,10 @@ package net.runelite.client.plugins.menuentryswapper;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
-import java.util.Set;
-import javax.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
-import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.ItemComposition;
-import net.runelite.api.MenuAction;
-import net.runelite.api.MenuEntry;
-import net.runelite.api.NPC;
-import net.runelite.api.events.ConfigChanged;
-import net.runelite.api.events.FocusChanged;
-import net.runelite.api.events.MenuEntryAdded;
-import net.runelite.api.events.MenuOpened;
-import net.runelite.api.events.MenuOptionClicked;
-import net.runelite.api.events.PostItemComposition;
-import net.runelite.api.events.WidgetMenuOptionClicked;
+import net.runelite.api.*;
+import net.runelite.api.events.*;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -56,11 +43,14 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.util.Text;
 import org.apache.commons.lang3.ArrayUtils;
 
+import javax.inject.Inject;
+import java.util.Set;
+
 @PluginDescriptor(
-	name = "Menu Entry Swapper",
-	description = "Change the default option that is displayed when hovering over objects",
-	tags = {"npcs", "inventory", "items", "objects"},
-	enabledByDefault = false
+		name = "Menu Entry Swapper",
+		description = "Change the default option that is displayed when hovering over objects",
+		tags = {"npcs", "inventory", "items", "objects"},
+		enabledByDefault = false
 )
 public class MenuEntrySwapperPlugin extends Plugin
 {
@@ -73,30 +63,30 @@ public class MenuEntrySwapperPlugin extends Plugin
 	private static final String ITEM_KEY_PREFIX = "item_";
 
 	private static final WidgetMenuOption FIXED_INVENTORY_TAB_CONFIGURE = new WidgetMenuOption(CONFIGURE,
-		MENU_TARGET, WidgetInfo.FIXED_VIEWPORT_INVENTORY_TAB);
+			MENU_TARGET, WidgetInfo.FIXED_VIEWPORT_INVENTORY_TAB);
 
 	private static final WidgetMenuOption FIXED_INVENTORY_TAB_SAVE = new WidgetMenuOption(SAVE,
-		MENU_TARGET, WidgetInfo.FIXED_VIEWPORT_INVENTORY_TAB);
+			MENU_TARGET, WidgetInfo.FIXED_VIEWPORT_INVENTORY_TAB);
 
 	private static final WidgetMenuOption RESIZABLE_INVENTORY_TAB_CONFIGURE = new WidgetMenuOption(CONFIGURE,
-		MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_INVENTORY_TAB);
+			MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_INVENTORY_TAB);
 
 	private static final WidgetMenuOption RESIZABLE_INVENTORY_TAB_SAVE = new WidgetMenuOption(SAVE,
-		MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_INVENTORY_TAB);
+			MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_INVENTORY_TAB);
 
 	private static final WidgetMenuOption RESIZABLE_BOTTOM_LINE_INVENTORY_TAB_CONFIGURE = new WidgetMenuOption(CONFIGURE,
-		MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_INVENTORY_TAB);
+			MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_INVENTORY_TAB);
 
 	private static final WidgetMenuOption RESIZABLE_BOTTOM_LINE_INVENTORY_TAB_SAVE = new WidgetMenuOption(SAVE,
-		MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_INVENTORY_TAB);
+			MENU_TARGET, WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_INVENTORY_TAB);
 
 	private static final Set<MenuAction> NPC_MENU_TYPES = ImmutableSet.of(
-		MenuAction.NPC_FIRST_OPTION,
-		MenuAction.NPC_SECOND_OPTION,
-		MenuAction.NPC_THIRD_OPTION,
-		MenuAction.NPC_FOURTH_OPTION,
-		MenuAction.NPC_FIFTH_OPTION,
-		MenuAction.EXAMINE_NPC);
+			MenuAction.NPC_FIRST_OPTION,
+			MenuAction.NPC_SECOND_OPTION,
+			MenuAction.NPC_THIRD_OPTION,
+			MenuAction.NPC_FOURTH_OPTION,
+			MenuAction.NPC_FIFTH_OPTION,
+			MenuAction.EXAMINE_NPC);
 
 	@Inject
 	private Client client;
@@ -199,8 +189,9 @@ public class MenuEntrySwapperPlugin extends Plugin
 	public void onWidgetMenuOptionClicked(WidgetMenuOptionClicked event)
 	{
 		if (event.getWidget() == WidgetInfo.FIXED_VIEWPORT_INVENTORY_TAB
-			|| event.getWidget() == WidgetInfo.RESIZABLE_VIEWPORT_INVENTORY_TAB
-			|| event.getWidget() == WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_INVENTORY_TAB)
+				|| event.getWidget() == WidgetInfo.RESIZABLE_VIEWPORT_INVENTORY_TAB
+				|| event.getWidget() == WidgetInfo.RESIZABLE_VIEWPORT_BOTTOM_LINE_INVENTORY_TAB
+				|| event.getWidget() == WidgetInfo.BANK_ITEM_CONTAINER)
 		{
 			configuringShiftClick = event.getMenuOption().equals(CONFIGURE) && Text.removeTags(event.getMenuTarget()).equals(MENU_TARGET);
 			refreshShiftClickCustomizationMenus();
@@ -341,8 +332,8 @@ public class MenuEntrySwapperPlugin extends Plugin
 		final NPC hintArrowNpc  = client.getHintArrowNpc();
 
 		if (hintArrowNpc != null
-			&& hintArrowNpc.getIndex() == eventId
-			&& NPC_MENU_TYPES.contains(MenuAction.of(event.getType())))
+				&& hintArrowNpc.getIndex() == eventId
+				&& NPC_MENU_TYPES.contains(MenuAction.of(event.getType())))
 		{
 			return;
 		}
@@ -352,6 +343,15 @@ public class MenuEntrySwapperPlugin extends Plugin
 			if (config.swapPickpocket() && target.contains("h.a.m."))
 			{
 				swap("pickpocket", option, target, true);
+			}
+
+			if (config.swapBlackjack() && target.contains("menaphite") || target.contains("bandit"))
+			{
+
+
+				boolean pickpocket = client.getVarbitValue(client.getVarps(),327) == 1;
+				if (pickpocket) swap("pickpocket", option, target, true);
+				swap("knock-out", option, target, true);
 			}
 
 			if (config.swapAbyssTeleport() && target.contains("mage of zamorak"))
@@ -420,6 +420,11 @@ public class MenuEntrySwapperPlugin extends Plugin
 			{
 				swap("quick-travel", option, target, true);
 			}
+
+			if (config.swapStory())
+			{
+				swap("story", option, target, true);
+			}
 		}
 		else if (config.swapTravel() && option.equals("pass") && target.equals("energy barrier"))
 		{
@@ -457,7 +462,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 			}
 		}
 		else if (config.swapFairyRing() != FairyRingMode.OFF && config.swapFairyRing() != FairyRingMode.ZANARIS
-			&& (option.equals("zanaris") || option.equals("configure") || option.equals("tree")))
+				&& (option.equals("zanaris") || option.equals("configure") || option.equals("tree")))
 		{
 			if (config.swapFairyRing() == FairyRingMode.LAST_DESTINATION)
 			{
@@ -536,6 +541,29 @@ public class MenuEntrySwapperPlugin extends Plugin
 		else if (config.swapBones() && option.equals("bury"))
 		{
 			swap("use", option, target, true);
+		}else if (config.swapPouches() &&
+				(target.equals("small pouch") ||
+						target.equals("medium pouch") ||
+						target.equals("large pouch") ||
+						target.equals("giant pouch")))
+		{
+			if(option.equals("deposit-all")){
+				swap("fill", option, target, true);
+			}else if(option.equals("fill")){
+				swap("empty", option, target, true);
+			}
+
+		} else if(target.startsWith("amulet of glory") && option.equals("remove")){
+			swap("edgeville", option, target, true);
+		} else if(target.startsWith("ring of dueling") && option.equals("remove")){
+			swap("castle wars", option, target, true);
+		} else if(target.startsWith("leather vambraces")){
+			swap("use", option, target, true);
+		}
+
+
+		if((config.swapDrop() || target.startsWith("leaping")) && option.equals("use")){
+			swap("drop", option, target, true);
 		}
 	}
 

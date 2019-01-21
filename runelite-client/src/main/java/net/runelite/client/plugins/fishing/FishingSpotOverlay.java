@@ -99,7 +99,7 @@ class FishingSpotOverlay extends Overlay
 				continue;
 			}
 
-			Color color = npc.getGraphic() == GraphicID.FLYING_FISH ? Color.RED : Color.CYAN;
+			Color color = Color.RED;
 
 			if (spot == FishingSpot.MINNOW && config.showMinnowOverlay())
 			{

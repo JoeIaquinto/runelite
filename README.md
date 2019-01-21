@@ -3,6 +3,16 @@
 
 RuneLite is a free, open source OldSchool RuneScape client.
 
+This is my fork to maintain a plugin to aid in blackjacking. An additional option has been added to the Menu Entry Swapper plugin titled 'Blackjack auto-swap'.
+
+With blackjack auto-swap on, the varbit ID 327 (Identifies whether you have an NPC knocked out or not), will swap either knock-out or pickpocket on bandits and menaphite thugs.
+
+This is a rejected feature by the Runelite team, but the license of the RuneLite project allows redistribution with modification.
+
+The only changes I have made are for the blackjack option.
+
+Follow the developer guide to build the project, and enjoy.
+
 If you have any questions, please join our IRC channel on [irc.rizon.net #runelite](http://qchat.rizon.net/?channels=runelite&uio=d4) or alternatively our [Discord](https://discord.gg/mePCs8U) server.
 
 ## Project Layout

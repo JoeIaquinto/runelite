@@ -183,6 +183,16 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
+			keyName = "swapBlackjack",
+			name = "Blackjack auto-swap",
+			description = "Swap to Knock-out and pickpocket when possible on NPC<br>Example:Bandit Thug, Menaphite Thug<br>NOTE: knock-out only works if it is the only NPC blackjacked in the area"
+	)
+	default boolean swapBlackjack()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "swapPay",
 		name = "Pay",
 		description = "Swap Talk-to with Pay on NPC<br>Example: Elstan, Heskel, Fayeth"
@@ -260,5 +270,35 @@ public interface MenuEntrySwapperConfig extends Config
 	default boolean swapTravel()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+			keyName = "swapStory",
+			name = "Story",
+			description = "Swap Talk-to with Story for Juna at Tears of Guthix"
+	)
+	default boolean swapStory()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "swapPouches",
+			name = "Pouches",
+			description = "DEPOSIT-ALL MUST BE SET IN BANK- Swap Deposit-All with Fill on Rune Pouches in the bank(Visual bugs cause it to still say deposit, but clicking the pouch works)"
+	)
+	default boolean swapPouches()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			keyName = "swapDrop",
+			name = "Drop",
+			description = "Swap use with Drop"
+	)
+	default boolean swapDrop()
+	{
+		return false;
 	}
 }
