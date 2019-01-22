@@ -100,7 +100,7 @@ class FishingSpotOverlay extends Overlay
 			}
 
 			Color color = Color.RED;
-
+			if (client.getLocalPlayer().getAnimation() == 5249) color = color.GREEN;
 			if (spot == FishingSpot.MINNOW && config.showMinnowOverlay())
 			{
 				MinnowSpot minnowSpot = plugin.getMinnowSpots().get(npc.getIndex());
@@ -132,7 +132,7 @@ class FishingSpotOverlay extends Overlay
 				Polygon poly = npc.getCanvasTilePoly();
 				if (poly != null)
 				{
-					OverlayUtil.renderPolygon(graphics, poly, color.darker());
+					OverlayUtil.renderPolygon(graphics, poly, color.brighter());
 				}
 			}
 

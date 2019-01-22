@@ -29,6 +29,9 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
+
+import net.runelite.api.Client;
+import net.runelite.api.Player;
 import net.runelite.api.Query;
 import net.runelite.api.queries.InventoryWidgetItemQuery;
 import net.runelite.api.widgets.WidgetItem;
@@ -44,7 +47,8 @@ public class InventoryTagsOverlay extends Overlay
 	private final QueryRunner queryRunner;
 	private final ItemManager itemManager;
 	private final InventoryTagsPlugin plugin;
-
+	@Inject
+	private Client client;
 	@Inject
 	private InventoryTagsOverlay(QueryRunner queryRunner, ItemManager itemManager, InventoryTagsPlugin plugin)
 	{
@@ -68,14 +72,27 @@ public class InventoryTagsOverlay extends Overlay
 		final Query query = new InventoryWidgetItemQuery();
 		final WidgetItem[] widgetItems = queryRunner.runQuery(query);
 
+		//Set current animation to conditionally highlight colors to aid 3t fish
+		final int currentAnim = client.getLocalPlayer().getAnimation();
 		// Iterate through all found items and draw the outlines
 		for (final WidgetItem item : widgetItems)
 		{
-			final String group = plugin.getTag(item.getId());
+			final int itemId = item.getId();
+			final String group = plugin.getTag(itemId);
 
 			if (group != null)
 			{
-				final Color color = plugin.getGroupNameColor(group);
+
+				Color color;
+				if ((itemId == 249 || itemId == 251 || itemId == 253 || itemId == 255 || itemId == 1939) && (currentAnim == 623 || currentAnim == -1)){
+					color = Color.GREEN;
+				}
+				else if ((itemId == 11328 || itemId == 11330 || itemId == 11332) && currentAnim == 5249){
+					color = Color.GREEN;
+				}
+				else {
+					color = plugin.getGroupNameColor(group);
+				}
 				if (color != null)
 				{
 					final BufferedImage outline = itemManager.getItemOutline(item.getId(), item.getQuantity(), color);
