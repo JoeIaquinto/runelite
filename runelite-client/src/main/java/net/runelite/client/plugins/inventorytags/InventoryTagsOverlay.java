@@ -83,9 +83,10 @@ public class InventoryTagsOverlay extends Overlay
 			if (group != null)
 			{
 
-				Color color;
-				if ((itemId == 249 || itemId == 251 || itemId == 253 || itemId == 255 || itemId == 1939) && (currentAnim == 623 || currentAnim == -1)){
-					color = Color.GREEN;
+				Color color = Color.red;
+				if ((itemId == 249 || itemId == 251 || itemId == 253 || itemId == 255 || itemId == 1939)){
+					if (currentAnim == 623 || currentAnim == -1) color = Color.GREEN;
+					if (currentAnim == 622) color = Color.YELLOW;
 				}
 				else if ((itemId == 11328 || itemId == 11330 || itemId == 11332) && currentAnim == 5249){
 					color = Color.GREEN;
@@ -95,7 +96,9 @@ public class InventoryTagsOverlay extends Overlay
 				}
 				if (color != null)
 				{
+
 					final BufferedImage outline = itemManager.getItemOutline(item.getId(), item.getQuantity(), color);
+
 					graphics.drawImage(outline, item.getCanvasLocation().getX() + 1, item.getCanvasLocation().getY() + 1, null);
 				}
 			}

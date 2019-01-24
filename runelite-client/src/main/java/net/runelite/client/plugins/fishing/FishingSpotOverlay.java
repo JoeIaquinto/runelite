@@ -88,7 +88,7 @@ class FishingSpotOverlay extends Overlay
 		for (NPC npc : fishingSpots)
 		{
 			FishingSpot spot = FishingSpot.getSPOTS().get(npc.getId());
-
+			Color color = Color.RED;
 			if (spot == null)
 			{
 				continue;
@@ -99,8 +99,12 @@ class FishingSpotOverlay extends Overlay
 				continue;
 			}
 
-			Color color = Color.RED;
-			if (client.getLocalPlayer().getAnimation() == 5249) color = color.GREEN;
+			if (plugin.getCurrentSpot() != null && plugin.getCurrentSpot() == spot)
+			{
+				if (client.getLocalPlayer().getAnimation() == 5249) color = color.GREEN;
+				if (client.getLocalPlayer().getAnimation() == 623) color = color.YELLOW;
+			}
+
 			if (spot == FishingSpot.MINNOW && config.showMinnowOverlay())
 			{
 				MinnowSpot minnowSpot = plugin.getMinnowSpots().get(npc.getIndex());
